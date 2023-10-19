@@ -9,6 +9,11 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+/**
+ * this {@code class} configures the http method needed to optain data from the
+ * schedule_builder API.
+ */
+
 public class HttpMethod {
     private static String authentication;
     private static String errorMessage;
@@ -42,14 +47,7 @@ public class HttpMethod {
             case 201:
                 return true;
             case 400:
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(con.getErrorStream()))) {
-                    StringBuilder sb = new StringBuilder();
-                    while (reader.readLine() != null) {
-                        sb.append(reader.readLine());
-
-                    }
-                    errorMessage = sb.toString();
-                }
+                errorMessage = readingErrorFromHttpConnection(con);
             default:
                 return false;
         }
@@ -78,16 +76,7 @@ public class HttpMethod {
             case 201:
                 return true;
             case 400:
-                try (BufferedReader br = new BufferedReader(new InputStreamReader(con.getErrorStream()))) {
-                    StringBuilder response = new StringBuilder();
-                    String responseMsg;
-
-                    while ((responseMsg = br.readLine()) != null) {
-                        response.append(responseMsg.trim());
-                    }
-                    errorMessage = response.toString();
-                }
-
+                errorMessage = readingErrorFromHttpConnection(con);
             default:
                 return false;
         }
@@ -100,5 +89,30 @@ public class HttpMethod {
 
     public String getErrorMessage() {
         return errorMessage;
+    }
+
+    /**
+     * {@code readingErrorFromHttpConnection} method fetches error messages from the
+     * API when there
+     * are errors in the request
+     * 
+     * @param con {@code HttpURLConnection}
+     * @return {@code String} error message
+     */
+    private static String readingErrorFromHttpConnection(HttpURLConnection con) {
+        StringBuilder response = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(con.getErrorStream()))) {
+            String responseMsg;
+            while ((responseMsg = br.readLine()) != null) {
+                response.append(responseMsg.trim());
+            }
+
+        } catch (IOException e) {
+            e.getMessage();
+            e.printStackTrace();
+        }
+
+        return response.toString();
+    
     }
 }
