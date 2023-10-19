@@ -17,6 +17,26 @@ import java.net.URL;
 public class HttpMethod {
     private static String authentication;
     private static String errorMessage;
+    private static String json;
+
+    public static boolean getConnection(String url) throws MalformedURLException, IOException {
+        URL endpoint = new URL(url);
+        HttpURLConnection con = (HttpURLConnection) endpoint.openConnection();
+
+        con.setRequestMethod("GET");
+        con.setDoOutput(true);
+        con.setRequestProperty("Content-type", "application/json");
+        con.setRequestProperty("Authorization", authentication);
+
+        switch (con.getResponseCode()) {
+            case 200:
+                json = getResponse(con);
+                return true;
+
+            default:
+                return false;
+        }
+    }
 
     public static boolean postConnection(String url, String payload, String token)
             throws MalformedURLException, IOException {
@@ -53,7 +73,7 @@ public class HttpMethod {
         }
     }
 
-    public static boolean putConnection(String url, String payload, String token)
+    public static boolean putConnection(String url, String payload)
             throws IOException, MalformedURLException {
         URL endpoint = new URL(url);
 
@@ -91,6 +111,10 @@ public class HttpMethod {
         return errorMessage;
     }
 
+    public String getJson() {
+        return json;
+    }
+
     /**
      * {@code readingErrorFromHttpConnection} method fetches error messages from the
      * API when there
@@ -113,6 +137,20 @@ public class HttpMethod {
         }
 
         return response.toString();
-    
+
+    }
+
+    private static String getResponse(HttpURLConnection con) {
+        StringBuilder sb = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
+            String responseLine;
+            while ((responseLine = reader.readLine()) != null) {
+                sb.append(responseLine.trim());
+            }
+        } catch (IOException e) {
+            e.getMessage();
+            e.printStackTrace();
+        }
+        return sb.toString();
     }
 }

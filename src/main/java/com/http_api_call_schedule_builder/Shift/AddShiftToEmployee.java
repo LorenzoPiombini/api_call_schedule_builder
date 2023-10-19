@@ -9,8 +9,8 @@ import com.http_api_call_schedule_builder.HttpMethod;
 public class AddShiftToEmployee {
 
     public boolean addShiftToEmploye(Long shiftId, Long employeeId) throws IOException, MalformedURLException {
-        HttpMethod method = new HttpMethod();
-        return HttpMethod.putConnection(urlModifier(shiftId, employeeId), null, method.getToken());
+
+        return HttpMethod.putConnection(urlModifier(shiftId, employeeId), null);
     }
 
     private String urlModifier(Long shiftId, Long employeeId) {
