@@ -12,6 +12,8 @@ import java.net.URL;
 /**
  * this {@code class} configures the http method needed to optain data from the
  * schedule_builder API.
+ * 
+ * @author Lorenzo Piombini
  */
 
 public class HttpMethod {
@@ -139,6 +141,16 @@ public class HttpMethod {
         return response.toString();
 
     }
+
+    /**
+     * {@code getResponse} converts the {@code JSON} object from the API into a
+     * {@code String}
+     * 
+     * @param con
+     * @return
+     * 
+     * 
+     */
 
     private static String getResponse(HttpURLConnection con) {
         StringBuilder sb = new StringBuilder();
