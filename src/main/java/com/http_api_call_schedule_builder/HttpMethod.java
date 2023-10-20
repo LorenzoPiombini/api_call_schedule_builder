@@ -9,6 +9,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.http_api_call_schedule_builder.Pojo_entities.Shift;
+
 /**
  * this {@code class} configures the http method needed to optain data from the
  * schedule_builder API.
@@ -159,6 +162,7 @@ public class HttpMethod {
             while ((responseLine = reader.readLine()) != null) {
                 sb.append(responseLine.trim());
             }
+
         } catch (IOException e) {
             e.getMessage();
             e.printStackTrace();

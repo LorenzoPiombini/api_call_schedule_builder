@@ -17,6 +17,15 @@ public class ReadShift {
         }
     }
 
+    public String readAllShift() throws MalformedURLException, IOException {
+        HttpMethod readAllMethod = new HttpMethod();
+        if (HttpMethod.getConnection(Constant.READ_ALL_SHIFT)) {
+            return readAllMethod.getJson();
+        } else {
+            return readAllMethod.getErrorMessage();
+        }
+    }
+
     private String urlModifier(long shiftId) {
         return Constant.READ_SHIFT.replace("shiftId", Long.toString(shiftId));
     }
